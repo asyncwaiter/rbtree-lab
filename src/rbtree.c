@@ -51,10 +51,24 @@ void right_rotate(rbtree *t, node_t *x){
 			
 }
 
+void delete_subtree(rbtree *t, node_t *node) {
+    if (node == t->nil) {
+      return;
+    }
+    delete_subtree(t, node->left);
+    delete_subtree(t, node->right);
+    free(node);
+  }
+
 void delete_rbtree(rbtree *t) {
-  // TODO: reclaim the tree nodes's memory
+  if (t == NULL) {
+    return;
+  }
+  delete_subtree(t, t->root);
+  free(t->nil);
   free(t);
 }
+
 
 void rbtree_insert_fixup(rbtree *t, node_t *z) {
   while (z->parent->color == RBTREE_RED) {
